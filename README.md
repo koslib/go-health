@@ -30,6 +30,29 @@ You can then freely use this `healthchecker` instance in your `/health` API endp
 healthchecker.Status()
 ```
 
+An example function you can use as-is with your http handler is: 
+
+```go
+// Status is a mux handler func that calls the healthcheck status function and reflects the actual state of your app.
+// The function has a simple purpose: if things are ok, then return status code 200, otherwise 400.
+func (h Handler) Status(w http.ResponseWriter, r *http.Request) {
+	responses := h.healthchecker.Status()
+	for _, r := range responses {
+		if r.Error != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+	}
+	
+	w.WriteHeader(http.StatusOK)
+}
+```
+
+As you will notice, this simple function returns status code `200` if everything is ok in your app and no errors are 
+returned by the `Status()` call, or `400` if something was wrong. 
+
+Feel free to edit the actual response body of it, depending on what you need to display.
+
 # Extending modules
 
 I have added a basic set of modules initially, which cover database and redis connections. However, it's very easy to 

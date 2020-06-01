@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -50,12 +49,20 @@ func main() {
 
 	h := NewHandler(healthchecker)
 
-	h.router.HandleFunc("/health", h.HealthcheckerFunc)
+	h.router.HandleFunc("/status", h.Status)
 	http.Handle("/", h.router)
 }
 
-// HealthcheckerFunc is a mux handler func that calls the healthcheck status function
-func (h Handler) HealthcheckerFunc(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(h.healthchecker.Status())
-	return
+// Status is a mux handler func that calls the healthcheck status function and reflects the actual state of your app.
+// The function has a simple purpose: if things are ok, then return status code 200, otherwise 400.
+func (h Handler) Status(w http.ResponseWriter, r *http.Request) {
+	responses := h.healthchecker.Status()
+	for _, r := range responses {
+		if r.Error != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
