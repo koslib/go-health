@@ -5,12 +5,23 @@ The idea is that instead of following default tutorials' advice on just returnin
 more meaningful which would reflect the actual health of your system.
 
 # Usage instructions
+
+## Install
+
+Install with
+```bash
+go get github.com/koslibpro/go-health
+```
+
+## Usage example
 There is a full code example [here](example/main.go). The example is based on `mux` router, however you can use this lib
  with any http server or router of your choice.
 
 Basically you create healthcheck module objects for the healthchecks you want to enable. Eg. for a database: 
 
 ```go
+import "github.com/koslibpro/go-health/healthchecks/modules/db"
+
 myDbHealthCheck := db.NewHealthCheckModule(
 		myDb,
 		"MyDbHealthCheck",

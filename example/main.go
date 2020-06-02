@@ -2,19 +2,18 @@ package main
 
 import (
 	"database/sql"
-	"log"
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/koslibpro/go-health/healthchecks"
 	"github.com/koslibpro/go-health/healthchecks/modules"
 	"github.com/koslibpro/go-health/healthchecks/modules/db"
-
-	"github.com/gorilla/mux"
 )
 
 var (
-	myDb *sql.DB
+	MyDb            *sql.DB
+	MyDbHealthCheck modules.HealthCheckModule
 )
 
 // Handler holds information about your API handler. In our case it has router and healthchecker instances inside.
@@ -35,17 +34,14 @@ func main() {
 	// Obviously you need to connect to your DB, which is not depicted in this example.
 
 	// Create the healthchecks modules you need
-	myDbHealthCheck := db.NewHealthCheckModule(
-		myDb,
+	MyDbHealthCheck = db.New(
+		MyDb,
 		"MyDbHealthCheck",
 		30*time.Second,
 	)
 
 	// Add them in the healthcheck
-	healthchecker, err := healthchecks.NewHealthCheck([]modules.HealthCheckModule{myDbHealthCheck})
-	if err != nil {
-		log.Fatal("failed to register healthcheck", err)
-	}
+	healthchecker := healthchecks.New([]modules.HealthCheckModule{MyDbHealthCheck})
 
 	h := NewHandler(healthchecker)
 
