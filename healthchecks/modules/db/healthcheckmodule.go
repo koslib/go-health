@@ -15,8 +15,8 @@ type HealthCheckModule struct {
 	LastError  error
 }
 
-// NewHealthCheckModule generates a new HealthCheckModule instance with the given params
-func NewHealthCheckModule(db *sql.DB, identifier string, interval time.Duration) *HealthCheckModule {
+// New generates a new HealthCheckModule instance with the given params
+func New(db *sql.DB, identifier string, interval time.Duration) *HealthCheckModule {
 	return &HealthCheckModule{
 		db:            db,
 		identifier:    identifier,
@@ -25,18 +25,19 @@ func NewHealthCheckModule(db *sql.DB, identifier string, interval time.Duration)
 }
 
 // Register enables the healthcheck and repeatedly runs status checks.
-func (h *HealthCheckModule) Register() error {
+func (h *HealthCheckModule) Register() {
 	h.ticker = time.NewTicker(h.checkInterval)
 
-	for {
-		select {
-		case <-h.ticker.C:
-			go func() {
-				h.CheckStatus()
-			}()
+	go func() {
+		for {
+			select {
+			case <-h.ticker.C:
+				go func() {
+					h.CheckStatus()
+				}()
+			}
 		}
-	}
-
+	}()
 }
 
 // IsHealthy returns a bool which represents the actual state of the healthcheck module (failing/passing).

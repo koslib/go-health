@@ -3,7 +3,7 @@ package modules
 type HealthCheckModule interface {
 	// Register enables the healthcheck and repeatedly runs status checks. This needs to run right after creating a
 	// healthcheck module, otherwise the ticker will not get started.
-	Register() error
+	Register()
 
 	// IsHealthy returns a bool which represents the actual state of the healthcheck module (failing/passing).
 	IsHealthy() bool

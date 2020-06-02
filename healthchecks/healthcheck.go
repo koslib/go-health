@@ -11,20 +11,19 @@ type HealthCheck struct {
 type HealthcheckResponse struct {
 	ModuleIdentifier string `json:"module_identifier"`
 	Status           bool   `json:"status"`
-	Error            error  `json:"error"`
+	Error            error  `json:"error,omitempty"`
 }
 
-// NewHealthCheck generates and returns a new HealthCheck instance with the given set of modules registered.
-func NewHealthCheck(modules []modules.HealthCheckModule) (*HealthCheck, error) {
+// New generates and returns a new HealthCheck instance with the given set of modules registered.
+func New(modules []modules.HealthCheckModule) *HealthCheck {
 	healthcheck := &HealthCheck{
 		modules: modules,
 	}
 	for _, module := range healthcheck.modules {
-		if err := module.Register(); err != nil {
-			return nil, err
-		}
+		module.Register()
 	}
-	return healthcheck, nil
+
+	return healthcheck
 }
 
 // Status returns the latest status of the healthcheck, which is a collection of HealthcheckResponses.
