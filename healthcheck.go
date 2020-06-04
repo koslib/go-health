@@ -1,10 +1,8 @@
-package healthchecks
-
-import "github.com/koslibpro/go-health/healthchecks/modules"
+package health
 
 // HealthCheck is a collection of healthcheck modules.
 type HealthCheck struct {
-	modules []modules.HealthCheckModule
+	modules []HealthCheckModule
 }
 
 // HealthcheckResponse is the response that is produced by triggering each healthcheck module, and contains useful info.
@@ -15,7 +13,7 @@ type HealthcheckResponse struct {
 }
 
 // New generates and returns a new HealthCheck instance with the given set of modules registered.
-func New(modules []modules.HealthCheckModule) *HealthCheck {
+func New(modules []HealthCheckModule) *HealthCheck {
 	healthcheck := &HealthCheck{
 		modules: modules,
 	}

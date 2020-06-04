@@ -6,24 +6,23 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/koslibpro/go-health/healthchecks"
-	"github.com/koslibpro/go-health/healthchecks/modules"
-	"github.com/koslibpro/go-health/healthchecks/modules/db"
+	"github.com/koslibpro/go-health"
+	"github.com/koslibpro/go-health/modules/db"
 )
 
 var (
 	MyDb            *sql.DB
-	MyDbHealthCheck modules.HealthCheckModule
+	MyDbHealthCheck health.HealthCheckModule
 )
 
 // Handler holds information about your API handler. In our case it has router and healthchecker instances inside.
 type Handler struct {
 	router        *mux.Router
-	healthchecker *healthchecks.HealthCheck
+	healthchecker *health.HealthCheck
 }
 
 // NewHandler generates and returns a new Handler instance with a healthchecker
-func NewHandler(healthchecker *healthchecks.HealthCheck) Handler {
+func NewHandler(healthchecker *health.HealthCheck) Handler {
 	return Handler{
 		router:        mux.NewRouter(),
 		healthchecker: healthchecker,
@@ -41,7 +40,7 @@ func main() {
 	)
 
 	// Add them in the healthcheck
-	healthchecker := healthchecks.New([]modules.HealthCheckModule{MyDbHealthCheck})
+	healthchecker := health.New([]health.HealthCheckModule{MyDbHealthCheck})
 
 	h := NewHandler(healthchecker)
 

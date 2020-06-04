@@ -1,5 +1,6 @@
-package modules
+package health
 
+// HealthCheckModule is the interface for all healthcheck modules
 type HealthCheckModule interface {
 	// Register enables the healthcheck and repeatedly runs status checks. This needs to run right after creating a
 	// healthcheck module, otherwise the ticker will not get started.
