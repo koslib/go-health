@@ -1,8 +1,13 @@
+# Project archived 
+
+Project is archived, in favor of https://github.com/hellofresh/health-go. My attempt was to get up and running quikcly, but `health-go` service covers this topic really well. I encourage you to use this one, however feel free to make your own research and use the healthcheck mechanism that works best for your use-case. 
+
 # go-health: healthchecks for Go services
 
 This is an attempt to gather in a small lib healthcheck modules and healthchecks for services written in Golang. 
 The idea is that instead of following default tutorials' advice on just returning "healthy" as a string, have something 
 more meaningful which would reflect the actual health of your system.
+
 
 # Usage instructions
 
